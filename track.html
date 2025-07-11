@@ -3,46 +3,83 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Track Order - Pinaman Pastries</title>
+  <title>Track Your Order - Pinaman Pastries</title>
   <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
   <header>
     <h1>Track Your Order</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="cart.html">Cart</a>
+      <a href="checkout.html">Checkout</a>
+    </nav>
   </header>
 
-  <section class="track-order">
-    <form id="track-form">
-      <input type="text" id="track-id" placeholder="Enter Order ID" required />
-      <button type="submit">Track</button>
-    </form>
-    <div id="status-result" style="margin-top:20px;"></div>
-  </section>
+  <main>
+    <section class="track-order">
+      <form id="track-form">
+        <input type="text" id="track-id" placeholder="Enter Order ID (e.g. PP-123456)" required />
+        <button type="submit">Track Order</button>
+      </form>
+      <div id="status-result" style="margin-top: 20px;"></div>
+    </section>
+  </main>
 
   <footer>
     <p>&copy; 2025 Pinaman Pastries</p>
   </footer>
 
-  <!-- ✅ Firebase SDKs -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 
-  <!-- ✅ Firebase Config -->
+  <!-- Firebase Config -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyAcEH9FhuXWVkLfixJKd6n9PBmX0ighxzc",
       authDomain: "pinamanpastries.firebaseapp.com",
       projectId: "pinamanpastries",
-      storageBucket: "pinamanpastries.appspot.com", <!-- fixed here -->
+      storageBucket: "pinamanpastries.appspot.com",
       messagingSenderId: "639575297353",
       appId: "1:639575297353:web:285be2a07a7718d650de98"
     };
 
     firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore(); // Make available globally
+    const db = firebase.firestore();
   </script>
 
-  <!-- ✅ App Logic -->
-  <script src="scripts.js"></script>
+  <script>
+    document.getElementById("track-form").addEventListener("submit", async function (e) {
+      e.preventDefault();
+      const orderID = document.getElementById("track-id").value.trim();
+      const resultBox = document.getElementById("status-result");
+
+      if (!orderID) return;
+
+      try {
+        const doc = await db.collection("orders").doc(orderID).get();
+
+        if (!doc.exists) {
+          resultBox.innerHTML = `<p style="color:red;">❌ Order not found. Please check your Order ID.</p>`;
+          return;
+        }
+
+        const order = doc.data();
+        resultBox.innerHTML = `
+          <h3>Status: ${order.status}</h3>
+          <p><strong>Name:</strong> ${order.name}</p>
+          <p><strong>Phone:</strong> ${order.phone}</p>
+          <p><strong>Delivery Address:</strong> ${order.location}</p>
+          <p><strong>Items:</strong><br>${order.items.map(i => `🍰 ${i.itemName} × ${i.quantity}`).join("<br>")}</p>
+          <p><strong>Ordered:</strong> ${new Date(order.createdAt).toLocaleString()}</p>
+        `;
+      } catch (err) {
+        console.error("Error fetching order:", err);
+        resultBox.innerHTML = `<p style="color:red;">Something went wrong. Try again later.</p>`;
+      }
+    });
+  </script>
 </body>
 </html>
