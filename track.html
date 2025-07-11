@@ -31,55 +31,55 @@
     <p>&copy; 2025 Pinaman Pastries</p>
   </footer>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+ <script type="module">
+  // Import Firebase SDK modules
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+  import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
-  <!-- Firebase Config -->
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyAcEH9FhuXWVkLfixJKd6n9PBmX0ighxzc",
-      authDomain: "pinamanpastries.firebaseapp.com",
-      projectId: "pinamanpastries",
-      storageBucket: "pinamanpastries.appspot.com",
-      messagingSenderId: "639575297353",
-      appId: "1:639575297353:web:285be2a07a7718d650de98"
-    };
+  // Your Firebase config
+const firebaseConfig = {
+  apiKey: "AIzaSyAcEH9FhuXWVkLfixJKd6n9PBmX0ighxzc",
+  authDomain: "pinamanpastries.firebaseapp.com",
+  projectId: "pinamanpastries",
+  storageBucket: "pinamanpastries.firebasestorage.app",
+  messagingSenderId: "639575297353",
+  appId: "1:639575297353:web:285be2a07a7718d650de98"
+};
+   
+  // Initialize Firebase
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-  </script>
+  // Reference to the form and result display
+  const form = document.getElementById("track-form");
+  const result = document.getElementById("track-result");
 
-  <script>
-    document.getElementById("track-form").addEventListener("submit", async function (e) {
-      e.preventDefault();
-      const orderID = document.getElementById("track-id").value.trim();
-      const resultBox = document.getElementById("status-result");
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const orderId = form.orderId.value.trim();
 
-      if (!orderID) return;
+    try {
+      const docRef = doc(db, "orders", orderId);
+      const docSnap = await getDoc(docRef);
 
-      try {
-        const doc = await db.collection("orders").doc(orderID).get();
-
-        if (!doc.exists) {
-          resultBox.innerHTML = `<p style="color:red;">❌ Order not found. Please check your Order ID.</p>`;
-          return;
-        }
-
-        const order = doc.data();
-        resultBox.innerHTML = `
-          <h3>Status: ${order.status}</h3>
-          <p><strong>Name:</strong> ${order.name}</p>
-          <p><strong>Phone:</strong> ${order.phone}</p>
-          <p><strong>Delivery Address:</strong> ${order.location}</p>
-          <p><strong>Items:</strong><br>${order.items.map(i => `🍰 ${i.itemName} × ${i.quantity}`).join("<br>")}</p>
-          <p><strong>Ordered:</strong> ${new Date(order.createdAt).toLocaleString()}</p>
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        result.innerHTML = `
+          <p><strong>Name:</strong> ${data.name}</p>
+          <p><strong>Phone:</strong> ${data.phone}</p>
+          <p><strong>Location:</strong> ${data.location}</p>
+          <p><strong>Notes:</strong> ${data.notes || 'N/A'}</p>
+          <p><strong>Status:</strong> Processing</p>
         `;
-      } catch (err) {
-        console.error("Error fetching order:", err);
-        resultBox.innerHTML = `<p style="color:red;">Something went wrong. Try again later.</p>`;
+      } else {
+        result.textContent = "❌ Order not found. Check the ID.";
       }
-    });
-  </script>
+    } catch (error) {
+      console.error("Error fetching order:", error);
+      result.textContent = "❌ Error fetching order. Try again.";
+    }
+  });
+</script>
+
 </body>
 </html>
