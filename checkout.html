@@ -40,9 +40,53 @@
     <p>&copy; 2025 Pinaman Pastries</p>
   </footer>
 
-  <!-- Firebase SDK -->
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+  <script type="module">
+  // Import Firebase modules from CDN
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAcEH9FhuXWVkLfixJKd6n9PBmX0ighxzc",
+  authDomain: "pinamanpastries.firebaseapp.com",
+  projectId: "pinamanpastries",
+  storageBucket: "pinamanpastries.firebasestorage.app",
+  messagingSenderId: "639575297353",
+  appId: "1:639575297353:web:285be2a07a7718d650de98"
+};
+
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
+
+  const form = document.getElementById("order-form");
+  const successDiv = document.getElementById("order-success");
+  const orderIdSpan = document.getElementById("order-id");
+
+  form.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const name = form.name.value;
+    const phone = form.phone.value;
+    const location = form.location.value;
+    const notes = form.notes.value;
+
+    try {
+      const docRef = await addDoc(collection(db, "orders"), {
+        name,
+        phone,
+        location,
+        notes,
+        createdAt: new Date()
+      });
+
+      orderIdSpan.textContent = docRef.id;
+      form.style.display = "none";
+      successDiv.style.display = "block";
+    } catch (err) {
+      console.error("Error submitting order:", err);
+      alert("Failed to submit order. Try again.");
+    }
+  });
+</script>
 
   <!-- App Script -->
   <script src="scripts.js"></script>
