@@ -8,42 +8,42 @@
 </head>
 <body>
   <header>
-    <h1>Pinaman Pastries</h1>
+    <h1>Checkout</h1>
     <nav>
       <a href="index.html">Home</a>
       <a href="shop.html">Shop</a>
       <a href="cart.html">Cart</a>
-      <a href="checkout.html">Checkout</a>
-      <a href="track.html">Track Your Order</a>
     </nav>
   </header>
 
-  <section class="checkout">
-    <h2>Complete Your Order</h2>
-    <form id="order-form">
-      <input type="text" name="name" placeholder="Your Full Name" required />
-      <input type="tel" name="phone" placeholder="Phone Number" required />
-      <input type="text" name="location" placeholder="Delivery Address" required />
-      <textarea name="notes" placeholder="Any extra instructions? (Optional)"></textarea>
-      <button type="submit">Submit Order</button>
-    </form>
+  <main>
+    <section class="checkout">
+      <h2>Complete Your Order</h2>
+      <form id="order-form">
+        <input type="text" name="name" placeholder="Your Full Name" required />
+        <input type="tel" name="phone" placeholder="Phone Number" required />
+        <input type="text" name="location" placeholder="Delivery Address" required />
+        <textarea name="notes" placeholder="Any extra instructions? (Optional)"></textarea>
+        <button type="submit">Submit Order</button>
+      </form>
 
-    <div id="order-success" style="display:none;">
-      <h3>✅ Order Received!</h3>
-      <p>Your Order ID: <span id="order-id"></span></p>
-      <p>Track it on the <a href="track.html">Order Status Page</a></p>
-    </div>
-  </section>
+      <div id="order-success" style="display: none;">
+        <h3>✅ Order Received!</h3>
+        <p>Your Order ID: <span id="order-id"></span></p>
+        <p>Track it on the <a href="track.html">Order Status Page</a></p>
+      </div>
+    </section>
+  </main>
 
   <footer>
     <p>&copy; 2025 Pinaman Pastries</p>
   </footer>
 
-  <!-- ✅ Firebase SDKs -->
+  <!-- Firebase SDK -->
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
 
-  <!-- ✅ Firebase Config -->
+  <!-- Firebase Config -->
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyAcEH9FhuXWVkLfixJKd6n9PBmX0ighxzc",
@@ -55,10 +55,10 @@
     };
 
     firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore(); // Global db for scripts.js
+    const db = firebase.firestore();
   </script>
 
-  <!-- ✅ Custom Script -->
+  <!-- App Script -->
   <script src="scripts.js"></script>
 </body>
 </html>
