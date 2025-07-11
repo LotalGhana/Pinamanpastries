@@ -110,3 +110,50 @@ window.onload = function () {
 };
 
 
+// Generate a unique order ID
+function generateOrderID() {
+  return "PP-" + Math.floor(Math.random() * 1000000);
+}
+
+// Handle form submission
+document.getElementById("order-form")?.addEventListener("submit", async function (e) {
+  e.preventDefault();
+
+  const name = this.name.value.trim();
+  const phone = this.phone.value.trim();
+  const location = this.location.value.trim();
+  const notes = this.notes.value.trim();
+  const cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+  if (!name || !phone || !location || cart.length === 0) {
+    alert("Please fill out all fields and make sure your cart is not empty.");
+    return;
+  }
+
+  const orderID = generateOrderID();
+  const orderData = {
+    orderID,
+    name,
+    phone,
+    location,
+    notes,
+    items: cart,
+    status: "Received",
+    createdAt: new Date().toISOString()
+  };
+
+  try {
+    await db.collection("orders").doc(orderID).set(orderData);
+    localStorage.removeItem("cart");
+
+    document.getElementById("order-form").style.display = "none";
+    document.getElementById("order-success").style.display = "block";
+    document.getElementById("order-id").textContent = orderID;
+    updateCartCount();
+  } catch (err) {
+    console.error("Error saving order:", err);
+    alert("Failed to submit order. Please try again.");
+  }
+});
+
+
