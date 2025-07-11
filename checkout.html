@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Checkout - Pinaman Pastries</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <h1>Pinaman Pastries</h1>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="shop.html">Shop</a>
+      <a href="cart.html">Cart</a>
+      <a href="checkout.html">Checkout</a>
+      <a href="track.html">Track Your Order</a>
+    </nav>
+  </header>
+
+  <section class="checkout">
+    <h2>Complete Your Order</h2>
+    <form id="order-form">
+      <input type="text" name="name" placeholder="Your Full Name" required />
+      <input type="tel" name="phone" placeholder="Phone Number" required />
+      <input type="text" name="location" placeholder="Delivery Address" required />
+      <textarea name="notes" placeholder="Any extra instructions? (Optional)"></textarea>
+      <button type="submit">Submit Order</button>
+    </form>
+
+    <div id="order-success" style="display:none;">
+      <h3>✅ Order Received!</h3>
+      <p>Your Order ID: <span id="order-id"></span></p>
+      <p>Track it on the <a href="track.html">Order Status Page</a></p>
+    </div>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 Pinaman Pastries</p>
+  </footer>
+
+  <!-- ✅ Firebase SDKs -->
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+
+  <!-- ✅ Firebase Config -->
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyAcEH9FhuXWVkLfixJKd6n9PBmX0ighxzc",
+      authDomain: "pinamanpastries.firebaseapp.com",
+      projectId: "pinamanpastries",
+      storageBucket: "pinamanpastries.appspot.com",
+      messagingSenderId: "639575297353",
+      appId: "1:639575297353:web:285be2a07a7718d650de98"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore(); // Global db for scripts.js
+  </script>
+
+  <!-- ✅ Custom Script -->
+  <script src="scripts.js"></script>
+</body>
+</html>
