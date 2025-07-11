@@ -15,3 +15,25 @@ function updateCartCount() {
 window.onload = () => {
   updateCartCount();
 };
+
+
+function addToCart(itemName, price) {
+  const cart = JSON.parse(localStorage.getItem('cart')) || [];
+  const existing = cart.find(item => item.itemName === itemName);
+  
+  if (existing) {
+    existing.quantity += 1;
+  } else {
+    cart.push({ itemName, price, quantity: 1 });
+  }
+
+  localStorage.setItem('cart', JSON.stringify(cart));
+  updateCartCount();
+  showToast(`${itemName} added to cart!`);
+}
+
+function showToast(message) {
+  alert(message); // Replace with animation later if needed
+}
+
+
