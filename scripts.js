@@ -1,15 +1,3 @@
-// ✅ Firebase Initialization (placed at top of scripts.js)
-const firebaseConfig = {
-  apiKey: "AIzaSyAcEH9FhuXWVkLfixJKd6n9PBmX0ighxzc",
-  authDomain: "pinamanpastries.firebaseapp.com",
-  projectId: "pinamanpastries",
-  storageBucket: "pinamanpastries.firebasestorage.app",
-  messagingSenderId: "639575297353",
-  appId: "1:639575297353:web:285be2a07a7718d650de98"
-};
-
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore(); // ✅ Make Firestore instance available
 
 // ✅ Toast notification
 function showToast(message) {
